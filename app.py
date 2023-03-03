@@ -31,7 +31,7 @@ def get_interfaces():
 print("¿Qué tipo de MAC deseas usar?")
 print("1. Aleatoria")
 print("2. Apple")
-print("3. Ingresar una MAC manualmente")
+print("3. Ingresar manualmente")
 option = input("Ingresa el número de la opción que deseas: ")
 
 # Genera la MAC según la opción elegida
@@ -40,7 +40,7 @@ if option == "1":
 elif option == "2":
     mac = apple_mac()
 elif option == "3":
-    mac = input("Ingresa la dirección MAC que deseas usar (en formato XX:XX:XX:XX:XX:XX): ")
+    mac = input("Ingresa la dirección MAC que deseas usar: ")
 else:
     print("Opción inválida.")
     exit()
@@ -70,8 +70,16 @@ except (ValueError, IndexError):
     print("Selección inválida.")
     exit()
 
+# Comando para desactivar la interfaz de red
+cmd = "ifconfig " + interface + " down"
+subprocess.call(cmd, shell=True)
+
 # Comando para cambiar la MAC
 cmd = "ifconfig " + interface + " hw ether " + mac
 
 # Ejecuta el comando
+subprocess.call(cmd, shell=True)
+
+# Comando para activar la interfaz de red
+cmd = "ifconfig " + interface + " up"
 subprocess.call(cmd, shell=True)
